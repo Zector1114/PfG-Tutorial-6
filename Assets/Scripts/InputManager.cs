@@ -20,6 +20,10 @@ public static class InputManager
 
         _ctrls.Permenanet.Enable();
 
+        _ctrls.InGame.Movement.performed += watchWASD =>
+        {
+            p.SetMovementDirection(watchWASD.ReadValue<Vector3>());
+        };
         _ctrls.InGame.Shoot.performed += _ =>
         {
             p.Shoot();
@@ -41,6 +45,10 @@ public static class InputManager
             {
                 if (Input.GetKeyDown(i.ToString())) p.BulletSwap(i - 6);
             }
+        };
+        _ctrls.InGame.Reload.performed += reload =>
+        {
+            p.CallReload();
         };
     }
 

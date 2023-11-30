@@ -73,12 +73,13 @@ public abstract class WeaponBase : MonoBehaviour
 
         if (ammoCurrent == 0) 
         {
-            Reload();
             return;
         }
 
         ammoCurrent--;
         Attack(percent);
+
+        AmmoUIUpdate();
 
         StartCoroutine(CooldownTimer());
 
@@ -94,10 +95,31 @@ public abstract class WeaponBase : MonoBehaviour
 
     protected abstract void Attack(float percent);
 
-    void Reload()
+    public void Reload()
     {
         Debug.Log("Reloading!");
         ammoCurrent = ammoStart;
+
+        AmmoUIUpdate();
+    }
+
+    public void AmmoCollect(int ammoNum)
+    {
+        if (ammoCurrent + ammoNum > ammoStart)
+        {
+            ammoCurrent = ammoStart;
+        }
+        else
+        {
+            ammoCurrent += ammoNum;
+        }
+
+        AmmoUIUpdate();
+    }
+
+    public void AmmoUIUpdate()
+    {
+        Score.Instance.ScoreUpdater(ammoCurrent);
     }
 
     public virtual void SetBulletType(EProjectileType bulType)

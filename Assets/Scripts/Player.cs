@@ -6,6 +6,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField] private List<WeaponBase> _myWeapons;
+    [SerializeField] private int ammoBoxNum;
+    [SerializeField] private float speed;
+    private Vector3 moveDirection;
     private bool weaponShootToggle;
     private int weapNum = 1;
 
@@ -15,6 +18,16 @@ public class Player : MonoBehaviour
     {
         InputManager.Init(this);
         InputManager.EnableInGame();
+    }
+
+    private void Update()
+    {
+        transform.position += speed * Time.deltaTime * moveDirection;
+    }
+
+    public void SetMovementDirection(Vector3 currentDirection)
+    {
+        moveDirection = currentDirection;
     }
 
     public void Shoot()
@@ -31,6 +44,8 @@ public class Player : MonoBehaviour
     public void WeaponSwap(int swapNum)
     {
         weapNum = swapNum;
+
+        _myWeapons[weapNum - 1].AmmoUIUpdate();
     }
 
     public void BulletSwap(int bulNum)
@@ -61,6 +76,23 @@ public class Player : MonoBehaviour
         else
         {
             BulletType |= toTog;
+        }
+    }
+
+    public void CallReload()
+    {
+        _myWeapons[weapNum - 1].Reload();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("collided!");
+
+        if (collision.gameObject.CompareTag("AmmoCrate"))
+        {
+            Debug.Log("Ammo!");
+            _myWeapons[weapNum - 1].AmmoCollect(ammoBoxNum);
+            Destroy(collision.gameObject);
         }
     }
 }

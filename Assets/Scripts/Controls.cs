@@ -62,6 +62,15 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""791869d3-ba61-4145-a5d4-7901645abeb7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -229,6 +238,17 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""action"": ""BulletSwitch"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6bcf5e28-f205-4584-bbff-ff45595f2f07"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -269,6 +289,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         m_InGame_Movement = m_InGame.FindAction("Movement", throwIfNotFound: true);
         m_InGame_WeaponSwitch = m_InGame.FindAction("WeaponSwitch", throwIfNotFound: true);
         m_InGame_BulletSwitch = m_InGame.FindAction("BulletSwitch", throwIfNotFound: true);
+        m_InGame_Reload = m_InGame.FindAction("Reload", throwIfNotFound: true);
         // Permenanet
         m_Permenanet = asset.FindActionMap("Permenanet", throwIfNotFound: true);
         m_Permenanet_MousePos = m_Permenanet.FindAction("MousePos", throwIfNotFound: true);
@@ -337,6 +358,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     private readonly InputAction m_InGame_Movement;
     private readonly InputAction m_InGame_WeaponSwitch;
     private readonly InputAction m_InGame_BulletSwitch;
+    private readonly InputAction m_InGame_Reload;
     public struct InGameActions
     {
         private @Controls m_Wrapper;
@@ -345,6 +367,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_InGame_Movement;
         public InputAction @WeaponSwitch => m_Wrapper.m_InGame_WeaponSwitch;
         public InputAction @BulletSwitch => m_Wrapper.m_InGame_BulletSwitch;
+        public InputAction @Reload => m_Wrapper.m_InGame_Reload;
         public InputActionMap Get() { return m_Wrapper.m_InGame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -366,6 +389,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @BulletSwitch.started += instance.OnBulletSwitch;
             @BulletSwitch.performed += instance.OnBulletSwitch;
             @BulletSwitch.canceled += instance.OnBulletSwitch;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IInGameActions instance)
@@ -382,6 +408,9 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             @BulletSwitch.started -= instance.OnBulletSwitch;
             @BulletSwitch.performed -= instance.OnBulletSwitch;
             @BulletSwitch.canceled -= instance.OnBulletSwitch;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IInGameActions instance)
@@ -451,6 +480,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnWeaponSwitch(InputAction.CallbackContext context);
         void OnBulletSwitch(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface IPermenanetActions
     {
